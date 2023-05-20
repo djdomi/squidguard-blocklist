@@ -70,8 +70,10 @@ http_access deny BadSites
 
 ## Test Configuration and reload Squid to apply. You usually only need one solution, but both can work in coexistance.
 
-> squid -k parse - verify if an error is occuring if not
-> /etc/init.d/squid reload
+` squid -k parse `
+>- verify if an error is occuring if not
+`/etc/init.d/squid reload`
+should get no error now...
 
 
 
