@@ -33,9 +33,9 @@ curl -sf "https://raw.githubusercontent.com/djdomi/squidguard-blocklist/main/fil
 
 
 mkdir -p $PATH2
-cat $FILE1 | sed "/#/d" | sed -e 's/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\} //g' | sort --unique | sed '/^$/d'  > $PATH2/$FILE2
+cat $FILE1 | sed '/#/d; s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\} //g; /^$/d' | sort --unique  > $PATH2/$FILE2
 
 
 
-##old tries, saving for future (ideas) :D
+##old tries, saving for future (ideas) :D or to see how i did it, while trying to impve it :D
 ##sed "/#/d" | sed '/^$/d' | sed -e 's/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}//g' 		> $FILE1
