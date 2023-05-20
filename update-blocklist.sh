@@ -1,39 +1,51 @@
-#created by https://github.com/djdomi/squidguard-blocklist with GPL v3
-#Working Directory
-DMPDIR=/opt/hosts/
-mkdir -p $DMPDIR
-#Where shall it be saved
-PATH2=/var/lib/squidguard/db/BL/VeryBadSites/
+#!/bin/bash
+
+# Working Directory, for dumpfile
+DMPDIR=/opt/hosts
+BACKPUDIR=$DMPDIR/backup
+
+# Where shall it be saved, usually it's used for squidguard, can be used 1by1 for squid ACL also
+PATH2=/var/lib/squidguard/db/BL/VeryBadSites
 FILE2=domains
 
-
-
-#Requires HOSTFORMAT
+# Source Area
 FILE1=$DMPDIR/tmp.file
-### Working AREA - Read Source for Credits as i dont be the original author of the source files but of the converter code ;-)
+FDATE=$(date '+%Y-%m-%d')
 
-#Source Area - first line, overwrite the file, the others EXTEND it
-curl -sf https://raw.githubusercontent.com/StevenBlack/hosts/master/data/StevenBlack/hosts 				       > $FILE1
-curl -sf https://raw.githubusercontent.com/brijrajparmar27/host-sources/master/Porn/hosts 				      >> $FILE1
-curl -sf https://raw.githubusercontent.com/Sinfonietta/hostfiles/master/pornography-hosts 				      >> $FILE1
-curl -sf https://raw.githubusercontent.com/StevenBlack/hosts/master/extensions/porn/clefspeare13/hosts 	>> $FILE1
-curl -sf https://raw.githubusercontent.com/tiuxo/hosts/master/porn 										                  >> $FILE1
-curl -sf https://raw.githubusercontent.com/AdAway/adaway.github.io/master/hosts.txt 					          >> $FILE1
-curl -sf https://raw.githubusercontent.com/StevenBlack/hosts/master/data/StevenBlack/hosts 				      >> $FILE1
-curl -sf "https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext" >> $FILE1 
-curl -sf "https://raw.githubusercontent.com/djdomi/squidguard-blocklist/main/files/domains"             >> $FILE1
+# Create always required paths if they don't exist
+mkdir -p "$PATH2" "$DMPDIR" "$BACKPUDIR" >/dev/null 2>&1
 
-#REMKARS !! #REMKARS !! #REMKARS !! #REMKARS !! #REMKARS !! #REMKARS !! #REMKARS !! #REMKARS !! #REMKARS !! #REMKARS !! #REMKARS !! 
-#this script can easy extended like above, 
-# 1.2.3.4 foo.bar.local -> its working !!!
-# foo.bar 1.2.3.4		-> NOT working!!!
-# 
+# Backup existing files
+if [ -f "$PATH2/$FILE2" ]; then
+  xz --threads=0 --best < "$PATH2/$FILE2" > "$BACKPUDIR/backup.domains.$FDATE.xz"
+fi
 
+if [ -f "$FILE1" ]; then
+  xz --threads=0 --best < "$FILE1" > "$BACKPUDIR/backup.TMPFILE.$FDATE.xz"
+  rm "$FILE1"
+fi
 
+# Download hosts
+urls=(
+  "https://raw.githubusercontent.com/StevenBlack/hosts/master/data/StevenBlack/hosts"
+  "https://raw.githubusercontent.com/brijrajparmar27/host-sources/master/Porn/hosts"
+  "https://raw.githubusercontent.com/Sinfonietta/hostfiles/master/pornography-hosts"
+  "https://raw.githubusercontent.com/StevenBlack/hosts/master/extensions/porn/clefspeare13/hosts"
+  "https://raw.githubusercontent.com/tiuxo/hosts/master/porn"
+  "https://raw.githubusercontent.com/AdAway/adaway.github.io/master/hosts.txt"
+  "https://raw.githubusercontent.com/StevenBlack/hosts/master/data/StevenBlack/hosts"
+  "https://raw.githubusercontent.com/djdomi/squidguard-blocklist/main/files/domains"
+)
+
+for url in "${urls[@]}"; do
+  curl -fs "$url" >>"$FILE1"
+done
 
 
 mkdir -p $PATH2
-cat $FILE1 | sed '/#/d; s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\} //g; /^$/d' | sort --unique  > $PATH2/$FILE2
+#cat $FILE1 | sed '/#/d; s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\} //g; /^$/d' | sort --unique  > $PATH2/$FILE2
+cat $FILE1 | sed '/#/d; s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\} //g; /^$/d; s/^[^.]*\.//g' | awk -F'.' '{if (NF>2) print $(NF-1)"."$NF; else print $0}' | sort --unique > $PATH2/$FILE2
+
 
 
 
