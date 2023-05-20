@@ -17,7 +17,9 @@ it catches from serval sources the hosts file formatted files and convert it int
 this can be used either by 
 
 ## SquidGuard
-<text missing for this moment>
+  <text missing for this moment>
+  
 or
+  
 ## Squid ACL
-<text missing for this moment>
+  <text missing for this moment>
