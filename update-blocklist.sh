@@ -21,6 +21,7 @@ curl -sf https://raw.githubusercontent.com/tiuxo/hosts/master/porn 										   
 curl -sf https://raw.githubusercontent.com/AdAway/adaway.github.io/master/hosts.txt 					          >> $FILE1
 curl -sf https://raw.githubusercontent.com/StevenBlack/hosts/master/data/StevenBlack/hosts 				      >> $FILE1
 curl -sf "https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext" >> $FILE1 
+curl -sf "https://raw.githubusercontent.com/djdomi/squidguard-blocklist/main/files/domains"             >> $FILE1
 
 #REMKARS !! #REMKARS !! #REMKARS !! #REMKARS !! #REMKARS !! #REMKARS !! #REMKARS !! #REMKARS !! #REMKARS !! #REMKARS !! #REMKARS !! 
 #this script can easy extended like above, 
