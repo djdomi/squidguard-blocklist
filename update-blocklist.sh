@@ -5,7 +5,7 @@ DMPDIR=/opt/hosts
 BACKPUDIR=$DMPDIR/backup
 
 # Where shall it be saved, usually it's used for squidguard, can be used 1by1 for squid ACL also
-PATH2=/var/lib/squidguard/db/BL/VeryBadSites
+PATH2=/var/lib/squidguard/db/BL/BadSites
 FILE2=domains
 
 # Source Area
