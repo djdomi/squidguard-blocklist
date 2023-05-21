@@ -43,8 +43,13 @@ done
 
 
 mkdir -p $PATH2
-#cat $FILE1 | sed '/#/d; s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\} //g; /^$/d' | sort --unique  > $PATH2/$FILE2
-cat $FILE1 | sed '/#/d; s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\} //g; /^$/d; s/^[^.]*\.//g' | awk -F'.' '{if (NF>2) print $(NF-1)"."$NF; else print $0}' | sort --unique > $PATH2/$FILE2
+
+
+#We have here two options - one, that just remove ips
+cat $FILE1 | sed '/#/d; s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\} //g; /^$/d' | sort --unique  > $PATH2/$FILE2
+
+#the second that has still some issues like .de.vu where i need to fix it in the future
+#cat $FILE1 | sed '/#/d; s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\} //g; /^$/d; s/^[^.]*\.//g' | awk -F'.' '{if (NF>2) print $(NF-1)"."$NF; else print $0}' | sort --unique > $PATH2/$FILE2
 
 
 
